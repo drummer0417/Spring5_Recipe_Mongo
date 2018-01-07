@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en" , xml:th="http://www.thymeleaf.org">
+
+<head>
+<meta charset="UTF-8" />
+<title  th:text="#{form.title}">Recipe</title>
+
+<!-- Latest compiled and minified CSS -->
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+	integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous"
+	th:href="@{/webjars/bootstrap/3.3.7-1/css/bootstrap.min.css}">
+
+<script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"
+	th:src="@{/webjars/bootstrap/3.3.7-1/js/bootstrap.min.js}"></script>
+</head>
+
+</head>
+<body>
+
+	<div class="container-fluid" style="margin-top: 40px">
+	<div class="col-md-2 col-md-offset-7" style="margin-bottom: 10px" align="right">
+		<a href=href="#" th:href="@{'/?lang=nl'}">NL</a> / 
+		<a  style="martgin: 100" href=href="#" th:href="@{'/?lang=en'}">En</a>	
+	</div>
+	<div>
+	</div>
+		<div class="row">
+			<div class="col-md-6 col-md-offset-3">
+				<div class="panel panel-primary">
+					<div class="panel-heading">
+						<h1 class="panel-title" th:text="#{form.myRecipes}">My Recipes!</h1>
+					</div>
+					<div class="panel-body">
+						<div class="table-responsive" th:if="${not #lists.isEmpty(recipes)}">
+							<table class="table table-hover ">
+								<thead class="thead-inverse">
+									<tr>
+										<th>ID</th>
+										<th th:text="#{recipe.description}">Description</th>
+										<th th:text="#{recipe.prepTime}">Prep time</th>
+										<th th:text="#{recipe.cookTime}">Cook time</th>
+										<th th:text="#{recipe.difficulty}">Difficulty</th>
+										<th th:text="#{recipe.servings}"></th>
+										<th th:text="#{recipe.source}">Source</th>
+										<th th:text="#{form.action}">Action</th>
+									</tr>
+								</thead>
+								<tr th:remove="all">
+									<td th:text="${recipe.id}">123</td>
+									<td th:text="${recipe.description}">Tasty Goodnees 1</td>
+									<td th:text="${recipe.prepTime}">prep time</td>
+									<td th:text="${recipe.cookTime}">cook time</td>
+									<td th:text="${recipe.difficultyValue.getValue()}">difficulty</td>
+									<td th:text="${recipe.servings}">servings</td>
+									<td th:text="${recipe.source}">source</td>
+									<td><a href="#" th:href="@{'/recipe/show/' + ${recipe.id}}">View</a></td>
+								</tr>
+								<tr th:remove="all">
+									<td th:text="${recipe.id}">123</td>
+									<td th:text="${recipe.description}">Tasty Goodnees 1</td>
+									<td th:text="${recipe.prepTime}">prep time</td>
+									<td th:text="${recipe.cookTime}">cook time</td>
+									<td th:text="${recipe.difficulty}">difficulty</td>
+									<td th:text="${recipe.servings}">servings</td>
+									<td th:text="${recipe.source}">source</td>
+									<td><a href="#" th:href="@{'/recipe/show/' + ${recipe.id}}">View</a></td>
+
+								</tr>
+								<tr th:each="recipe : ${recipes}">
+									<td th:text="${recipe.id}">334</td>
+									<td th:text="${recipe.description}">Tasty Goodnees 3</td>
+									<td th:text="${recipe.prepTime}">prep time</td>
+									<td th:text="${recipe.cookTime}">cook time</td>
+									<td th:text="${recipe.difficulty.getValue()}">difficulty</td>
+									<td th:text="${recipe.servings}">servings</td>
+									<td th:text="${recipe.source}">source</td>
+									<td><a th:text="#{action.view}" href="#" th:href="@{'/recipe/' +  ${recipe.id} + '/show' }">View.</a>
+									 / <a th:text="#{action.update}" href="#" th:href="@{'/recipe/' +  ${recipe.id} + '/update' }">Update</a>
+									 / <a th:text="#{action.delete}" href="#" th:href="@{'/recipe/' +  ${recipe.id} + '/delete' }">Delete</a></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>

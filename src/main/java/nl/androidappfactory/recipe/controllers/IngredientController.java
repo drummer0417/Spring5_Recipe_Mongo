@@ -81,7 +81,7 @@ public class IngredientController {
 	public String getNewIngredientForm(@PathVariable String recipeId, Model model) {
 
 		IngredientCommand ingredient = new IngredientCommand();
-		// ingredient.setRecipeId(recipeId);
+		ingredient.setRecipeId(recipeId);
 		ingredient.setUom(new UnitOfMeasureCommand());
 
 		List<UnitOfMeasureCommand> uomList = unitOfMeasureService.getAll();
@@ -89,7 +89,7 @@ public class IngredientController {
 		model.addAttribute("ingredient", ingredient);
 		model.addAttribute("uomList", uomList);
 
-		log.debug("update ingredient: " + ingredient);
+		log.debug("new ingredient: " + ingredient);
 		return "recipe/ingredient/ingredientform";
 	}
 
@@ -98,7 +98,7 @@ public class IngredientController {
 
 		log.debug("in saveIngredient: " + ingredientCommand);
 
-		ingredientService.saveIngredientCommand(ingredientCommand);
+		IngredientCommand savedIngredient = ingredientService.saveIngredientCommand(ingredientCommand);
 
 		return "redirect:/recipe/" + recipeId + "/ingredients";
 	}

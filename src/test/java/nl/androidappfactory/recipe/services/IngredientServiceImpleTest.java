@@ -1,6 +1,7 @@
 package nl.androidappfactory.recipe.services;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.times;
@@ -107,7 +108,7 @@ public class IngredientServiceImpleTest {
 		IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command);
 
 		// then
-		assertEquals("3", savedCommand.getId());
+		assertNotNull(savedCommand.getId());
 		verify(recipeRepository, times(1)).findById(anyString());
 		verify(recipeRepository, times(1)).save(any(Recipe.class));
 

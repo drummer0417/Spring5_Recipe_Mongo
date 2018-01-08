@@ -98,11 +98,8 @@ public class IngredientController {
 
 		log.debug("in saveIngredient: " + ingredientCommand);
 
-		if (ingredientCommand.getId() == null || ingredientCommand.getId().isEmpty()) {
-			ingredientService.createIngredient(ingredientCommand);
-		} else {
-			ingredientService.updateIngredient(ingredientCommand);
-		}
+		ingredientService.saveIngredientCommand(ingredientCommand);
+
 		return "redirect:/recipe/" + recipeId + "/ingredients";
 	}
 }

@@ -2,6 +2,7 @@ package nl.androidappfactory.recipe.models;
 
 import java.util.Set;
 
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import lombok.Getter;
@@ -14,6 +15,8 @@ public class Category {
 
 	private String id;
 	private String description;
+
+	@DBRef
 	private Set<Recipe> recipes;
 
 	@Override

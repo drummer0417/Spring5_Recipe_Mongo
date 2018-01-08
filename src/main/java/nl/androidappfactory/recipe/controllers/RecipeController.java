@@ -57,16 +57,16 @@ public class RecipeController {
 	}
 
 	@GetMapping("recipe/{id}/update")
-	public String updateRecipe(@PathVariable String id, Model model) {
+	public String updateRecipeForm(@PathVariable String id, Model model) {
 
 		RecipeCommand recipeCommand = recipeService.findCommandById(id);
 
 		List<String> currentCategoryIds = new ArrayList<>();
-		recipeCommand.getCategories().forEach(category -> currentCategoryIds.add(String.valueOf(category.getId())));
+		recipeCommand.getCategories()
+				.forEach(category -> recipeCommand.getCurrentCategoryIds().add(String.valueOf(category.getId())));
+		recipeCommand.setCategoryList(categoryService.getAllCategoryCommands());
 
 		model.addAttribute("recipe", recipeCommand);
-		model.addAttribute("categoryList", categoryService.getAllCategories());
-		model.addAttribute("currentCategoryIds", currentCategoryIds);
 
 		return RECIPE_RECIPEFORM_URL;
 	}
@@ -100,7 +100,7 @@ public class RecipeController {
 
 	}
 
-	public String saveORUpdate2(@Valid @ModelAttribute RecipeCommand recipeCommand, BindingResult bindingResult) {
+	public String deleteRecipe(@Valid @ModelAttribute RecipeCommand recipeCommand, BindingResult bindingResult) {
 
 		log.debug("in saveOrUpdate: " + Arrays.toString(recipeCommand.getSelectedCategories()));
 

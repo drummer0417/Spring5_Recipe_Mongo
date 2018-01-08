@@ -105,7 +105,7 @@ public class IngredientControllerTest {
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/recipe/2/ingredients"));
 
-		verify(ingredientService, times(1)).updateIngredient(any());
+		verify(ingredientService, times(1)).saveIngredientCommand(any());
 	}
 
 	@Test
@@ -116,7 +116,7 @@ public class IngredientControllerTest {
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/recipe/2/ingredients"));
 
-		verify(ingredientService, times(1)).createIngredient(any());
+		verify(ingredientService, times(1)).saveIngredientCommand(any());
 	}
 
 	public static String asJsonString(final Object obj) {

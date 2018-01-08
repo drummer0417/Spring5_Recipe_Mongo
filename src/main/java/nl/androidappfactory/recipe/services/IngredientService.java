@@ -6,9 +6,8 @@ public interface IngredientService {
 
 	public IngredientCommand findByRecipeIdAndIngredientId(String recipeId, String ingredientId);
 
-	public void deleteIngredient(String recipeId, String ingredientId);
+	public IngredientCommand saveIngredientCommand(IngredientCommand command);
 
-	public IngredientCommand updateIngredient(IngredientCommand igredientCommand);
+	public void deleteIngredient(String recipeId, String idToDelete);
 
-	public IngredientCommand createIngredient(IngredientCommand ingredientCommand);
 }

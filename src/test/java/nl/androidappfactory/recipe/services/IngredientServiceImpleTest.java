@@ -21,8 +21,8 @@ import nl.androidappfactory.recipe.converters.UnitOfMeasureCommandToUnitOfMeasur
 import nl.androidappfactory.recipe.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import nl.androidappfactory.recipe.models.Ingredient;
 import nl.androidappfactory.recipe.models.Recipe;
-import nl.androidappfactory.recipe.repositories.IngredientRepository;
 import nl.androidappfactory.recipe.repositories.RecipeRepository;
+import nl.androidappfactory.recipe.repositories.UnitOfMeasureRepository;
 
 public class IngredientServiceImpleTest {
 
@@ -34,7 +34,7 @@ public class IngredientServiceImpleTest {
 	RecipeRepository recipeRepository;
 
 	@Mock
-	IngredientRepository ingredientRepository;
+	UnitOfMeasureRepository unitOfMeasureRepository;
 
 	IngredientService ingredientService;
 
@@ -51,9 +51,10 @@ public class IngredientServiceImpleTest {
 	public void setUp() throws Exception {
 		MockitoAnnotations.initMocks(this);
 
-		ingredientService = new IngredientServiceImpl(recipeRepository, ingredientRepository,
-				ingredientToIngredientCommand,
-				ingredientCommandToIngredient, unitOfMeasureCommandToUnitOfMeasure);
+		ingredientService = new IngredientServiceImpl(ingredientToIngredientCommand,
+				ingredientCommandToIngredient,
+				recipeRepository,
+				unitOfMeasureRepository);
 	}
 
 	@Test
@@ -103,7 +104,7 @@ public class IngredientServiceImpleTest {
 		when(recipeRepository.save(any())).thenReturn(savedRecipe);
 
 		// when
-		IngredientCommand savedCommand = ingredientService.updateIngredient(command);
+		IngredientCommand savedCommand = ingredientService.saveIngredientCommand(command);
 
 		// then
 		assertEquals("3", savedCommand.getId());

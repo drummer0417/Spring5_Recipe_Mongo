@@ -56,6 +56,9 @@ public class RecipeCommand {
 	private String[] selectedCategories;
 	private Byte[] image;
 
+	private List<CategoryCommand> categoryList = new ArrayList<>();
+	private List<String> currentCategoryIds = new ArrayList<>();
+
 	public void addCategory(CategoryCommand categoryCommand) {
 		categories.add(categoryCommand);
 	}

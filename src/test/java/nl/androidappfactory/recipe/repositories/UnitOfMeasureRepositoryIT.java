@@ -13,10 +13,22 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import nl.androidappfactory.recipe.bootstrap.RecipeBootstrap;
 import nl.androidappfactory.recipe.models.UnitOfMeasure;
+import nl.androidappfactory.recipe.repositories.reactive.CategoryReactiveRepository;
+import nl.androidappfactory.recipe.repositories.reactive.RecipeReactiveRepository;
+import nl.androidappfactory.recipe.repositories.reactive.UnitOfMeasureReactiveRepository;
 
 @RunWith(SpringRunner.class)
 @DataMongoTest
 public class UnitOfMeasureRepositoryIT {
+
+	@Autowired
+	CategoryReactiveRepository categoryReactiveRepository;
+
+	@Autowired
+	RecipeReactiveRepository recipeReactiveRepository;
+
+	@Autowired
+	UnitOfMeasureReactiveRepository unitOfMeasureReactiveRepository;
 
 	@Autowired
 	UnitOfMeasureRepository unitOfMeasureRepository;

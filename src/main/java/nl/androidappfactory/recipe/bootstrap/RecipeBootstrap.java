@@ -62,6 +62,7 @@ public class RecipeBootstrap implements ApplicationListener<ContextRefreshedEven
 		List<Recipe> recipes = getRecipes();
 		log.debug("Save recipes: " + recipes);
 		recipeRepository.saveAll(recipes);
+
 	}
 
 	private List<Recipe> getRecipes() {

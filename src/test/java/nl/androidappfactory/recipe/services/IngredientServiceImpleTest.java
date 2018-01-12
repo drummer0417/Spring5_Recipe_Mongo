@@ -28,7 +28,7 @@ public class IngredientServiceImpleTest {
 
 	private final IngredientToIngredientCommand ingredientToIngredientCommand;
 	private final IngredientCommandToIngredient ingredientCommandToIngredient;
-	private final UnitOfMeasureCommandToUnitOfMeasure unitOfMeasureCommandToUnitOfMeasure;
+	// private final UnitOfMeasureCommandToUnitOfMeasure unitOfMeasureCommandToUnitOfMeasure;
 
 	@Mock
 	RecipeReactiveRepository recipeReactiveRepository;
@@ -44,7 +44,7 @@ public class IngredientServiceImpleTest {
 				new UnitOfMeasureToUnitOfMeasureCommand());
 		this.ingredientCommandToIngredient = new IngredientCommandToIngredient(
 				new UnitOfMeasureCommandToUnitOfMeasure());
-		this.unitOfMeasureCommandToUnitOfMeasure = new UnitOfMeasureCommandToUnitOfMeasure();
+		// this.unitOfMeasureCommandToUnitOfMeasure = new UnitOfMeasureCommandToUnitOfMeasure();
 	}
 
 	@Before

@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -21,7 +20,7 @@ public class Ingredient {
 	private BigDecimal amount;
 	// private Recipe recipe;
 
-	@DBRef
+	// @DBRef
 	private UnitOfMeasure uom;
 
 	public Ingredient() {}

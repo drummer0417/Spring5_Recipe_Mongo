@@ -1,38 +1,33 @@
 package nl.androidappfactory.recipe.services;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
+import lombok.extern.slf4j.Slf4j;
 import nl.androidappfactory.recipe.commands.UnitOfMeasureCommand;
 import nl.androidappfactory.recipe.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import nl.androidappfactory.recipe.models.UnitOfMeasure;
-import nl.androidappfactory.recipe.repositories.UnitOfMeasureRepository;
+import nl.androidappfactory.recipe.repositories.reactive.UnitOfMeasureReactiveRepository;
+import reactor.core.publisher.Flux;
 
+@Slf4j
 @Service
 public final class UnitOfMeasureServiceImpl implements UnitOfMeasureServise {
 
-	UnitOfMeasureRepository unitofmeasureRepository;
+	UnitOfMeasureReactiveRepository unitofmeasureReactiveRepository;
 	UnitOfMeasureToUnitOfMeasureCommand converter;
 
-	public UnitOfMeasureServiceImpl(UnitOfMeasureRepository unitofmeasureRepository,
+	public UnitOfMeasureServiceImpl(UnitOfMeasureReactiveRepository unitofmeasureReactiveRepository,
 			UnitOfMeasureToUnitOfMeasureCommand converter) {
-		this.unitofmeasureRepository = unitofmeasureRepository;
+		this.unitofmeasureReactiveRepository = unitofmeasureReactiveRepository;
 		this.converter = converter;
 	}
 
 	@Override
-	public List<UnitOfMeasureCommand> getAll() {
+	public Flux<UnitOfMeasureCommand> getAll() {
 
-		List<UnitOfMeasure> uomList = (List<UnitOfMeasure>) unitofmeasureRepository.findAll();
+		log.info("in getAll... doing it reactive: ");
+		Flux<UnitOfMeasure> uoms = unitofmeasureReactiveRepository.findAll();
 
-		List<UnitOfMeasureCommand> uomCommandList = new ArrayList<>();
-
-		for (UnitOfMeasure unitOfMeasure : uomList) {
-			uomCommandList.add(converter.convert(unitOfMeasure));
-		}
-		return uomCommandList;
+		return uoms.map(converter::convert);
 	}
-
 }

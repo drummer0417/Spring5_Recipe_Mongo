@@ -72,14 +72,17 @@ public class UnitOfMeasureRepositoryReactiveIT {
 
 	@Test
 	public void testSave() throws Exception {
+
+		log.debug("#uoms.........: " + unitOfMeasureReactiveRepository.count().block());
+
 		UnitOfMeasure unitOfMeasure = new UnitOfMeasure();
 		unitOfMeasure.setDescription("Liter");
 
 		unitOfMeasureReactiveRepository.save(unitOfMeasure).block();
 
-		Long count = categoryReactiveRepository.count().block();
+		Long count = unitOfMeasureReactiveRepository.count().block();
 
-		assertEquals(Long.valueOf(5L), count);
+		assertEquals(Long.valueOf(10L), count);
 	}
 
 }

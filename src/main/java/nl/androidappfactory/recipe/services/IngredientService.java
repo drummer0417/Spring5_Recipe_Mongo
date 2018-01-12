@@ -1,13 +1,14 @@
 package nl.androidappfactory.recipe.services;
 
 import nl.androidappfactory.recipe.commands.IngredientCommand;
+import reactor.core.publisher.Mono;
 
 public interface IngredientService {
 
-	public IngredientCommand findByRecipeIdAndIngredientId(String recipeId, String ingredientId);
+	public Mono<IngredientCommand> findByRecipeIdAndIngredientId(String recipeId, String ingredientId);
 
-	public IngredientCommand saveIngredientCommand(IngredientCommand command);
+	public Mono<IngredientCommand> saveIngredientCommand(IngredientCommand command);
 
-	public void deleteIngredient(String recipeId, String idToDelete);
+	public Mono<Void> deleteIngredient(String recipeId, String idToDelete);
 
 }

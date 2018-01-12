@@ -48,9 +48,11 @@ public class IngredientController {
 			@PathVariable String ingredientId,
 			Model model) {
 
-		IngredientCommand ingredientCommand = ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId);
-		log.debug("after call service: " + ingredientCommand);
-		model.addAttribute("ingredient", ingredientCommand);
+		// IngredientCommand ingredientCommand = ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId)
+		// .block();
+		// log.debug("after call service: " + ingredientCommand);
+		model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId)
+				.block());
 
 		return "recipe/ingredient/show";
 	}
@@ -58,7 +60,7 @@ public class IngredientController {
 	@GetMapping("/recipe/{recipeId}/ingredient/{ingredientId}/delete")
 	public String deleteIngredient(@PathVariable String recipeId, @PathVariable String ingredientId, Model modewl) {
 
-		ingredientService.deleteIngredient(recipeId, ingredientId);
+		ingredientService.deleteIngredient(recipeId, ingredientId).block();
 
 		return "redirect:/recipe/" + recipeId + "/ingredients";
 
@@ -67,8 +69,8 @@ public class IngredientController {
 	@GetMapping("/recipe/{recipeId}/ingredient/{ingredientId}/update")
 	public String getIngredientForm(@PathVariable String recipeId, @PathVariable String ingredientId, Model model) {
 
-		IngredientCommand ingredient = ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId);
-		List<UnitOfMeasureCommand> uomList = unitOfMeasureService.getAll();
+		IngredientCommand ingredient = ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId).block();
+		List<UnitOfMeasureCommand> uomList = unitOfMeasureService.getAll().collectList().block();
 
 		model.addAttribute("ingredient", ingredient);
 		model.addAttribute("uomList", uomList);
@@ -84,7 +86,7 @@ public class IngredientController {
 		ingredient.setRecipeId(recipeId);
 		ingredient.setUom(new UnitOfMeasureCommand());
 
-		List<UnitOfMeasureCommand> uomList = unitOfMeasureService.getAll();
+		List<UnitOfMeasureCommand> uomList = unitOfMeasureService.getAll().collectList().block();
 
 		model.addAttribute("ingredient", ingredient);
 		model.addAttribute("uomList", uomList);
@@ -98,7 +100,7 @@ public class IngredientController {
 
 		log.debug("in saveIngredient: " + ingredientCommand);
 
-		IngredientCommand savedIngredient = ingredientService.saveIngredientCommand(ingredientCommand);
+		IngredientCommand savedIngredient = ingredientService.saveIngredientCommand(ingredientCommand).block();
 
 		return "redirect:/recipe/" + recipeId + "/ingredients";
 	}

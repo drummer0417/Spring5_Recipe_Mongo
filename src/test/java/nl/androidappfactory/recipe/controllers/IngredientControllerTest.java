@@ -23,9 +23,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import nl.androidappfactory.recipe.commands.IngredientCommand;
 import nl.androidappfactory.recipe.commands.RecipeCommand;
+import nl.androidappfactory.recipe.commands.UnitOfMeasureCommand;
 import nl.androidappfactory.recipe.services.IngredientService;
 import nl.androidappfactory.recipe.services.RecipeService;
 import nl.androidappfactory.recipe.services.UnitOfMeasureServise;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 @Controller
 public class IngredientControllerTest {
@@ -74,9 +77,10 @@ public class IngredientControllerTest {
 	public void testShowIngredient() throws Exception {
 
 		// Given
-		IngredientCommand ingredientCommand = new IngredientCommand();
+		Mono<IngredientCommand> ingredientCommandMono = Mono.just(new IngredientCommand());
 
-		when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString())).thenReturn(ingredientCommand);
+		when(ingredientService.findByRecipeIdAndIngredientId(anyString(), anyString()))
+				.thenReturn(ingredientCommandMono);
 
 		mockMvc.perform(get("/recipe/1/ingredient/2/show"))
 				.andExpect(status().isOk())
@@ -86,6 +90,8 @@ public class IngredientControllerTest {
 
 	@Test
 	public void testDeleteIngredient() throws Exception {
+
+		when(ingredientService.deleteIngredient(anyString(), anyString())).thenReturn(Mono.empty());
 
 		mockMvc.perform(get("/recipe/1/ingredient/2/delete"))
 				.andExpect(status().is3xxRedirection())
@@ -97,11 +103,17 @@ public class IngredientControllerTest {
 	@Test
 	public void saveIngredient() throws Exception {
 
-		IngredientCommand ic = new IngredientCommand();
-		ic.setId("3");
+		// given
+		IngredientCommand command = new IngredientCommand();
+		command.setId("3");
+		command.setRecipeId("2");
+
+		// when
+		when(ingredientService.saveIngredientCommand(any())).thenReturn(Mono.just(command));
 
 		mockMvc.perform(post("/recipe/2/ingredient")
-				.param("id", String.valueOf(ic.getId())))
+				.param("id", "")
+				.param("description", "iets"))
 				.andExpect(status().is3xxRedirection())
 				.andExpect(view().name("redirect:/recipe/2/ingredients"));
 
@@ -109,14 +121,24 @@ public class IngredientControllerTest {
 	}
 
 	@Test
-	public void createIngredient() throws Exception {
+	public void testNewIngredient() throws Exception {
 
-		mockMvc.perform(post("/recipe/2/ingredient")
-				.param("id", ""))
-				.andExpect(status().is3xxRedirection())
-				.andExpect(view().name("redirect:/recipe/2/ingredients"));
+		// given
+		RecipeCommand recipeCommand = new RecipeCommand();
+		recipeCommand.setId("1");
 
-		verify(ingredientService, times(1)).saveIngredientCommand(any());
+		// when
+		when(unitOfMeasureService.getAll()).thenReturn(Flux.just(new UnitOfMeasureCommand()));
+
+		// then
+		mockMvc.perform(get("/recipe/1/ingredient/new"))
+				.andExpect(status().isOk())
+				.andExpect(view().name("recipe/ingredient/ingredientform"))
+				.andExpect(model().attributeExists("ingredient"))
+				.andExpect(model().attributeExists("uomList"));
+
+		verify(unitOfMeasureService, times(1)).getAll();
+
 	}
 
 	public static String asJsonString(final Object obj) {

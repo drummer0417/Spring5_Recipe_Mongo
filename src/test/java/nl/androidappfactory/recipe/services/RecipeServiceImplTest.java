@@ -66,10 +66,10 @@ public class RecipeServiceImplTest {
 
 		when(recipeService.getAllRecipes()).thenReturn(recipes);
 
-		// verify that recipeRepository.getAllRecipes returns a list with 1 recipe
+		// verify that recipeReactiveRepository.getAllRecipes returns a list with 1 recipe
 		assertEquals(expectedRecipesReturned, recipeService.getAllRecipes().size());
 
-		// verify that recipeRepository.getAllRecipes is called once and onde only
+		// verify that recipeReactiveRepository.getAllRecipes is called once and onde only
 		verify(recipeRepository, times(1)).findAllByOrderByDescription();
 	}
 

@@ -62,7 +62,7 @@ public class RecipeController {
 		// List<String> currentCategoryIds = new ArrayList<>();
 		recipeCommand.getCategories()
 				.forEach(category -> recipeCommand.getCurrentCategoryIds().add(String.valueOf(category.getId())));
-		recipeCommand.setCategoryList(categoryService.getAllCategoryCommands());
+		recipeCommand.setCategoryList(categoryService.getAllCategoryCommands().collectList().block());
 
 		model.addAttribute("recipe", recipeCommand);
 

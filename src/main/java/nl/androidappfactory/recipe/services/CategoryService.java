@@ -1,13 +1,12 @@
 package nl.androidappfactory.recipe.services;
 
-import java.util.List;
-
 import nl.androidappfactory.recipe.commands.CategoryCommand;
 import nl.androidappfactory.recipe.models.Category;
+import reactor.core.publisher.Flux;
 
 public interface CategoryService {
 
-	public List<Category> getAllCategories();
+	public Flux<Category> getAllCategories();
 
-	public List<CategoryCommand> getAllCategoryCommands();
+	public Flux<CategoryCommand> getAllCategoryCommands();
 }

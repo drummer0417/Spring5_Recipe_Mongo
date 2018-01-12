@@ -19,11 +19,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import nl.androidappfactory.recipe.commands.CategoryCommand;
 import nl.androidappfactory.recipe.commands.RecipeCommand;
 import nl.androidappfactory.recipe.exceptions.NotFoundException;
 import nl.androidappfactory.recipe.models.Recipe;
 import nl.androidappfactory.recipe.services.CategoryService;
 import nl.androidappfactory.recipe.services.RecipeService;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 /**
@@ -98,7 +100,11 @@ public class RecipeControllerTest {
 		RecipeCommand command = new RecipeCommand();
 		command.setId("2");
 
+		CategoryCommand cat1 = new CategoryCommand();
+		Flux<CategoryCommand> catFlux = Flux.just(cat1);
+
 		when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(command));
+		when(categoryService.getAllCategoryCommands()).thenReturn(catFlux);
 
 		mockMvc.perform(get("/recipe/2/update"))
 				.andExpect(status().isOk())

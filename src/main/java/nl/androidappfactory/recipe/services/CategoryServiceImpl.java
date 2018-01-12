@@ -1,49 +1,42 @@
 package nl.androidappfactory.recipe.services;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
 import nl.androidappfactory.recipe.commands.CategoryCommand;
 import nl.androidappfactory.recipe.converters.CategoryToCategoryCommand;
-import nl.androidappfactory.recipe.repositories.CategoryRepository;
+import nl.androidappfactory.recipe.models.Category;
+import nl.androidappfactory.recipe.repositories.reactive.CategoryReactiveRepository;
+import reactor.core.publisher.Flux;
 
 @Slf4j
 @Service
 public class CategoryServiceImpl implements CategoryService {
 
-	private CategoryRepository categoryRepository;
-	private CategoryToCategoryCommand categoryConverter;
+	private CategoryReactiveRepository categoryReactiveRepository;
+	private CategoryToCategoryCommand categoryToCommandConverter;
 
-	public CategoryServiceImpl(CategoryRepository categoryRepository, CategoryToCategoryCommand categoryConverter) {
-		this.categoryRepository = categoryRepository;
-		this.categoryConverter = categoryConverter;
+	public CategoryServiceImpl(CategoryReactiveRepository categoryReactigveRepository,
+			CategoryToCategoryCommand categoryToCommandConverter) {
+		this.categoryReactiveRepository = categoryReactigveRepository;
+		this.categoryToCommandConverter = categoryToCommandConverter;
 	}
 
 	@Override
-	public List<nl.androidappfactory.recipe.models.Category> getAllCategories() {
+	public Flux<Category> getAllCategories() {
 
 		log.debug("in getAllCategories: ");
 
-		List<nl.androidappfactory.recipe.models.Category> categories = new ArrayList<>();
-
-		categoryRepository.findAll().forEach(category -> categories.add(category));
-
-		return categories;
+		return categoryReactiveRepository.findAll();
 	}
 
 	@Override
-	public List<CategoryCommand> getAllCategoryCommands() {
+	public Flux<CategoryCommand> getAllCategoryCommands() {
 
 		log.debug("in getAllCategoryCommands: ");
 
-		List<CategoryCommand> categories = new ArrayList<>();
+		return categoryReactiveRepository.findAll().map(categoryToCommandConverter::convert);
 
-		categoryRepository.findAll().forEach(category -> categories.add(categoryConverter.convert(category)));
-
-		return categories;
 	}
 
 }

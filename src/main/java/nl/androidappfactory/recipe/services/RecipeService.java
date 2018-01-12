@@ -1,20 +1,20 @@
 package nl.androidappfactory.recipe.services;
 
-import java.util.List;
-
 import nl.androidappfactory.recipe.commands.RecipeCommand;
 import nl.androidappfactory.recipe.models.Recipe;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
 
 public interface RecipeService {
 
-	List<Recipe> getAllRecipes();
+	Flux<Recipe> getAllRecipes();
 
-	Recipe findById(String l);
+	Mono<Recipe> findById(String l);
 
-	RecipeCommand findCommandById(String id);
+	Mono<RecipeCommand> findCommandById(String id);
 
-	RecipeCommand saveRecipeCommand(RecipeCommand recipeCommand);
+	Mono<RecipeCommand> saveRecipeCommand(RecipeCommand recipeCommand);
 
-	void deleteByID(String idToDelete);
+	Mono<Void> deleteByID(String idToDelete);
 
 }

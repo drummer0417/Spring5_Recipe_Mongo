@@ -9,7 +9,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.view;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
@@ -23,6 +22,7 @@ import org.springframework.ui.Model;
 
 import nl.androidappfactory.recipe.models.Recipe;
 import nl.androidappfactory.recipe.services.RecipeService;
+import reactor.core.publisher.Flux;
 
 /**
  * Created by jt on 6/17/17.
@@ -50,6 +50,8 @@ public class IndexControllerTest {
 
 		String expectedView = "index";
 
+		when(recipeService.getAllRecipes()).thenReturn(Flux.empty());
+
 		MockMvc mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
 		mockMvc.perform(get("/"))
 				.andExpect(status().isOk())
@@ -60,7 +62,6 @@ public class IndexControllerTest {
 	public void getIndexPage() throws Exception {
 
 		// given
-		List<Recipe> recipes = new ArrayList<>();
 		Recipe recipe1 = new Recipe();
 		recipe1.setId("1");
 		recipe1.setDescription("Frikandel");
@@ -69,10 +70,7 @@ public class IndexControllerTest {
 		recipe2.setId("2");
 		recipe2.setDescription("Friet");
 
-		recipes.add(recipe1);
-		recipes.add(recipe2);
-
-		when(recipeService.getAllRecipes()).thenReturn(recipes);
+		when(recipeService.getAllRecipes()).thenReturn(Flux.just(recipe1, recipe2));
 
 		@SuppressWarnings("unchecked")
 		ArgumentCaptor<List<Recipe>> argumentCaptor = ArgumentCaptor.forClass(List.class);

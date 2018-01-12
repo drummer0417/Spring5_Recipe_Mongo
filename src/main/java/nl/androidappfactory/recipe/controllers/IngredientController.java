@@ -36,7 +36,7 @@ public class IngredientController {
 	public String getAllIngredients(@PathVariable String recipeId, Model model) {
 
 		log.debug("Getting ingredients: ");
-		RecipeCommand recipeCommand = recipeService.findCommandById(recipeId);
+		RecipeCommand recipeCommand = recipeService.findCommandById(recipeId).block();
 		model.addAttribute("recipe", recipeCommand);
 
 		return "recipe/ingredient/list";

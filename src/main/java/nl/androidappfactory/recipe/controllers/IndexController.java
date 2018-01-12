@@ -25,7 +25,7 @@ public class IndexController {
 	public String getIndexPage(Model model) {
 
 		log.debug("in getAllRecipes()");
-		List<Recipe> recipes = recipeService.getAllRecipes();
+		List<Recipe> recipes = recipeService.getAllRecipes().collectList().block();
 		model.addAttribute("recipes", recipes);
 		return "index";
 	}

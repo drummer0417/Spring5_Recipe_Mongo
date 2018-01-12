@@ -1,8 +1,6 @@
 package nl.androidappfactory.recipe.controllers;
 
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import javax.validation.Valid;
 
@@ -44,7 +42,7 @@ public class RecipeController {
 	public String showById(@PathVariable String id, Model model) {
 
 		log.debug("id: " + id);
-		model.addAttribute("recipe", recipeService.findById(id));
+		model.addAttribute("recipe", recipeService.findById(id).block());
 
 		return "recipe/show";
 	}
@@ -59,9 +57,9 @@ public class RecipeController {
 	@GetMapping("recipe/{id}/update")
 	public String updateRecipeForm(@PathVariable String id, Model model) {
 
-		RecipeCommand recipeCommand = recipeService.findCommandById(id);
+		RecipeCommand recipeCommand = recipeService.findCommandById(id).block();
 
-		List<String> currentCategoryIds = new ArrayList<>();
+		// List<String> currentCategoryIds = new ArrayList<>();
 		recipeCommand.getCategories()
 				.forEach(category -> recipeCommand.getCurrentCategoryIds().add(String.valueOf(category.getId())));
 		recipeCommand.setCategoryList(categoryService.getAllCategoryCommands());
@@ -94,7 +92,7 @@ public class RecipeController {
 		// // Ignore... is new recipe TODO: handle exception in service
 		// }
 
-		RecipeCommand recipeAfterSave = recipeService.saveRecipeCommand(command);
+		RecipeCommand recipeAfterSave = recipeService.saveRecipeCommand(command).block();
 		log.debug("after save: " + recipeAfterSave.getId());
 		return "redirect:/recipe/" + recipeAfterSave.getId() + "/show";
 
@@ -122,7 +120,7 @@ public class RecipeController {
 		// // Ignore... is new recipe TODO: handle exception in service
 		// }
 
-		RecipeCommand recipeAfterSave = recipeService.saveRecipeCommand(recipeCommand);
+		RecipeCommand recipeAfterSave = recipeService.saveRecipeCommand(recipeCommand).block();
 		log.debug("after save: " + recipeAfterSave.getId());
 		return "redirect:/recipe/" + recipeAfterSave.getId() + "/show";
 	}

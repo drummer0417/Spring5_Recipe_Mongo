@@ -24,6 +24,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import nl.androidappfactory.recipe.commands.RecipeCommand;
 import nl.androidappfactory.recipe.services.ImageService;
 import nl.androidappfactory.recipe.services.RecipeService;
+import reactor.core.publisher.Mono;
 
 public class ImageControllerTest {
 
@@ -63,7 +64,7 @@ public class ImageControllerTest {
 		RecipeCommand command = new RecipeCommand();
 		command.setId("1");
 
-		when(recipeService.findCommandById(anyString())).thenReturn(command);
+		when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(command));
 
 		// when
 		mockMvc.perform(get("/recipe/1/image"))
@@ -96,7 +97,7 @@ public class ImageControllerTest {
 
 		command.setImage(IMAGE);
 
-		when(recipeService.findCommandById(anyString())).thenReturn(command);
+		when(recipeService.findCommandById(anyString())).thenReturn(Mono.just(command));
 
 		// when
 		MockHttpServletResponse response = mockMvc.perform(get("/recipe/1/recipeimage"))

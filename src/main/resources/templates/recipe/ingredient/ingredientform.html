@@ -24,6 +24,7 @@
 				<form th:object="${ingredient}" th:action="@{'/recipe/' + ${ingredient.getRecipeId()} + '/ingredient'} "
 					th:method="POST">
 					<input type="hidden" th:field="*{id}" />
+					<input type="hidden" th:field="*{recipeId}" th:value="*{id}">
 					<div class="pannel-group">
 						<div class="panel panel-primary">
 							<div class="panel-heading">

@@ -102,6 +102,8 @@ public class IngredientController {
 
 		IngredientCommand savedIngredient = ingredientService.saveIngredientCommand(ingredientCommand).block();
 
+		log.info("after save: " + savedIngredient);
+
 		return "redirect:/recipe/" + recipeId + "/ingredients";
 	}
 }

@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
@@ -26,6 +27,7 @@ import nl.androidappfactory.recipe.services.ImageService;
 import nl.androidappfactory.recipe.services.RecipeService;
 import reactor.core.publisher.Mono;
 
+@Ignore
 public class ImageControllerTest {
 
 	public static Byte[] IMAGE;

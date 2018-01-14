@@ -12,6 +12,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.List;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
@@ -45,7 +46,7 @@ public class IndexControllerTest {
 		controller = new IndexController(recipeService);
 	}
 
-	@Test
+	@Ignore
 	public void testMockMvc() throws Exception {
 
 		String expectedView = "index";

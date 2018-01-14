@@ -27,6 +27,9 @@ import nl.androidappfactory.recipe.services.ImageService;
 import nl.androidappfactory.recipe.services.RecipeService;
 import reactor.core.publisher.Mono;
 
+//
+// Ignore for now
+//
 @Ignore
 public class ImageControllerTest {
 

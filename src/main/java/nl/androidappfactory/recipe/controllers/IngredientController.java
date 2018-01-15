@@ -1,7 +1,5 @@
 package nl.androidappfactory.recipe.controllers;
 
-import java.util.List;
-
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +14,7 @@ import nl.androidappfactory.recipe.commands.UnitOfMeasureCommand;
 import nl.androidappfactory.recipe.services.IngredientService;
 import nl.androidappfactory.recipe.services.RecipeService;
 import nl.androidappfactory.recipe.services.UnitOfMeasureServise;
+import reactor.core.publisher.Flux;
 
 @Slf4j
 @Controller
@@ -48,11 +47,11 @@ public class IngredientController {
 			@PathVariable String ingredientId,
 			Model model) {
 
+		log.debug("in getIngredient, reactive now :-) : ");
 		// IngredientCommand ingredientCommand = ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId)
 		// .block();
 		// log.debug("after call service: " + ingredientCommand);
-		model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId)
-				.block());
+		model.addAttribute("ingredient", ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId));
 
 		return "recipe/ingredient/show";
 	}
@@ -70,7 +69,7 @@ public class IngredientController {
 	public String getIngredientForm(@PathVariable String recipeId, @PathVariable String ingredientId, Model model) {
 
 		IngredientCommand ingredient = ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId).block();
-		List<UnitOfMeasureCommand> uomList = unitOfMeasureService.getAll().collectList().block();
+		Flux<UnitOfMeasureCommand> uomList = unitOfMeasureService.getAll();
 
 		model.addAttribute("ingredient", ingredient);
 		model.addAttribute("uomList", uomList);
@@ -86,7 +85,7 @@ public class IngredientController {
 		ingredient.setRecipeId(recipeId);
 		ingredient.setUom(new UnitOfMeasureCommand());
 
-		List<UnitOfMeasureCommand> uomList = unitOfMeasureService.getAll().collectList().block();
+		Flux<UnitOfMeasureCommand> uomList = unitOfMeasureService.getAll();
 
 		model.addAttribute("ingredient", ingredient);
 		model.addAttribute("uomList", uomList);

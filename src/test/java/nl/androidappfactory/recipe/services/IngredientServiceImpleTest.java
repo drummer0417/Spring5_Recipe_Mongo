@@ -14,12 +14,14 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import nl.androidappfactory.recipe.commands.IngredientCommand;
+import nl.androidappfactory.recipe.commands.UnitOfMeasureCommand;
 import nl.androidappfactory.recipe.converters.IngredientCommandToIngredient;
 import nl.androidappfactory.recipe.converters.IngredientToIngredientCommand;
 import nl.androidappfactory.recipe.converters.UnitOfMeasureCommandToUnitOfMeasure;
 import nl.androidappfactory.recipe.converters.UnitOfMeasureToUnitOfMeasureCommand;
 import nl.androidappfactory.recipe.models.Ingredient;
 import nl.androidappfactory.recipe.models.Recipe;
+import nl.androidappfactory.recipe.models.UnitOfMeasure;
 import nl.androidappfactory.recipe.repositories.reactive.RecipeReactiveRepository;
 import nl.androidappfactory.recipe.repositories.reactive.UnitOfMeasureReactiveRepository;
 import reactor.core.publisher.Mono;
@@ -28,7 +30,7 @@ public class IngredientServiceImpleTest {
 
 	private final IngredientToIngredientCommand ingredientToIngredientCommand;
 	private final IngredientCommandToIngredient ingredientCommandToIngredient;
-	// private final UnitOfMeasureCommandToUnitOfMeasure unitOfMeasureCommandToUnitOfMeasure;
+	private final UnitOfMeasureCommandToUnitOfMeasure unitOfMeasureCommandToUnitOfMeasure;
 
 	@Mock
 	RecipeReactiveRepository recipeReactiveRepository;
@@ -44,7 +46,7 @@ public class IngredientServiceImpleTest {
 				new UnitOfMeasureToUnitOfMeasureCommand());
 		this.ingredientCommandToIngredient = new IngredientCommandToIngredient(
 				new UnitOfMeasureCommandToUnitOfMeasure());
-		// this.unitOfMeasureCommandToUnitOfMeasure = new UnitOfMeasureCommandToUnitOfMeasure();
+		this.unitOfMeasureCommandToUnitOfMeasure = new UnitOfMeasureCommandToUnitOfMeasure();
 	}
 
 	@Before
@@ -94,6 +96,12 @@ public class IngredientServiceImpleTest {
 		command.setId("3");
 		command.setRecipeId("2");
 
+		UnitOfMeasureCommand uomCommand = new UnitOfMeasureCommand();
+		uomCommand.setId("1");
+		command.setUom(uomCommand);
+
+		UnitOfMeasure uom = unitOfMeasureCommandToUnitOfMeasure.convert(uomCommand);
+
 		Mono<Recipe> recipeMono = Mono.just(new Recipe());
 
 		Recipe savedRecipe = new Recipe();
@@ -103,6 +111,7 @@ public class IngredientServiceImpleTest {
 
 		when(recipeReactiveRepository.findById(anyString())).thenReturn(recipeMono);
 		when(recipeReactiveRepository.save(any())).thenReturn(savedRecipeMono);
+		when(unitOfMeasureReactiveRepository.findById(anyString())).thenReturn(Mono.just(uom));
 
 		// when
 		Mono<IngredientCommand> savedCommand = ingredientService.saveIngredientCommand(command);

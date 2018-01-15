@@ -11,6 +11,7 @@ import nl.androidappfactory.recipe.converters.IngredientToIngredientCommand;
 import nl.androidappfactory.recipe.exceptions.NotFoundException;
 import nl.androidappfactory.recipe.models.Ingredient;
 import nl.androidappfactory.recipe.models.Recipe;
+import nl.androidappfactory.recipe.models.UnitOfMeasure;
 import nl.androidappfactory.recipe.repositories.reactive.RecipeReactiveRepository;
 import nl.androidappfactory.recipe.repositories.reactive.UnitOfMeasureReactiveRepository;
 import reactor.core.publisher.Mono;
@@ -71,21 +72,24 @@ public class IngredientServiceImpl implements IngredientService {
 
 			Ingredient ingredientSaved = null;
 
+			UnitOfMeasure uom = unitOfMeasureReactiveRepository.findById(command.getUom().getId()).block();
+			if (uom == null) {
+				log.error("Unit of measure for ingredient not found: " + command.getUom().toString());
+				throw new NotFoundException("Unit of measure not found: " + command.getUom().toString());
+			}
+
 			if (ingredientOptional.isPresent()) {
 				Ingredient ingredientFound = ingredientOptional.get();
 				ingredientFound.setDescription(command.getDescription());
 				ingredientFound.setAmount(command.getAmount());
-				ingredientFound.setUom(unitOfMeasureReactiveRepository.findById(command.getUom().getId()).block());
-				if (ingredientFound.getUom() == null) {
-					log.error("Unit of measure for ingredient not found: " + command.getUom().toString());
-					throw new NotFoundException("Unit of measure not found: " + command.getUom().toString());
-				}
+				ingredientFound.setUom(uom);
 				ingredientSaved = ingredientFound;
 			} else {
 				// add new Ingredient
 				Ingredient ingredient = ingredientCommandToIngredient.convert(command);
-				// ingredient.setRecipe(recipe);
+				ingredient.setUom(uom);
 				recipe.addIngredient(ingredient);
+
 				ingredientSaved = ingredient;
 			}
 			recipeReactiveRepository.save(recipe).block();

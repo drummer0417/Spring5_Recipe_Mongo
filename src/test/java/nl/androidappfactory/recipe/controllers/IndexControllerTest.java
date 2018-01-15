@@ -80,7 +80,7 @@ public class IndexControllerTest {
 		when(recipeService.getAllRecipes()).thenReturn(Flux.just(recipe1, recipe2));
 
 		@SuppressWarnings("unchecked")
-		ArgumentCaptor<List<Recipe>> argumentCaptor = ArgumentCaptor.forClass(List.class);
+		ArgumentCaptor<Flux<Recipe>> argumentCaptor = ArgumentCaptor.forClass(Flux.class);
 
 		// when
 		String viewName = controller.getIndexPage(model);
@@ -89,7 +89,7 @@ public class IndexControllerTest {
 		assertEquals("index", viewName);
 		verify(recipeService, times(1)).getAllRecipes();
 		verify(model, times(1)).addAttribute(eq("recipes"), argumentCaptor.capture());
-		List<Recipe> listInController = argumentCaptor.getValue();
+		List<Recipe> listInController = argumentCaptor.getValue().collectList().block();
 		assertEquals(2, listInController.size());
 	}
 }

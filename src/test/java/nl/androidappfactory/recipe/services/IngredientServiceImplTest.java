@@ -26,7 +26,7 @@ import nl.androidappfactory.recipe.repositories.reactive.RecipeReactiveRepositor
 import nl.androidappfactory.recipe.repositories.reactive.UnitOfMeasureReactiveRepository;
 import reactor.core.publisher.Mono;
 
-public class IngredientServiceImpleTest {
+public class IngredientServiceImplTest {
 
 	private final IngredientToIngredientCommand ingredientToIngredientCommand;
 	private final IngredientCommandToIngredient ingredientCommandToIngredient;
@@ -41,7 +41,7 @@ public class IngredientServiceImpleTest {
 	IngredientService ingredientService;
 
 	// init converters
-	public IngredientServiceImpleTest() {
+	public IngredientServiceImplTest() {
 		this.ingredientToIngredientCommand = new IngredientToIngredientCommand(
 				new UnitOfMeasureToUnitOfMeasureCommand());
 		this.ingredientCommandToIngredient = new IngredientCommandToIngredient(

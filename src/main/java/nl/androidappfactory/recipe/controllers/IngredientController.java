@@ -2,7 +2,11 @@ package nl.androidappfactory.recipe.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
+import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,15 +24,25 @@ import reactor.core.publisher.Flux;
 @Controller
 public class IngredientController {
 
-	RecipeService recipeService;
-	IngredientService ingredientService;
-	UnitOfMeasureServise unitOfMeasureService;
+	private final static String URL_INGREDIENT_FORM = "recipe/ingredient/ingredientform";
+
+	private RecipeService recipeService;
+	private IngredientService ingredientService;
+	private UnitOfMeasureServise unitOfMeasureService;
+
+	private WebDataBinder webDataBinder;
 
 	public IngredientController(RecipeService recipeService, IngredientService ingredientService,
 			UnitOfMeasureServise unitOfMeasureService) {
 		this.recipeService = recipeService;
 		this.ingredientService = ingredientService;
 		this.unitOfMeasureService = unitOfMeasureService;
+	}
+
+	@InitBinder("ingredient")
+	public void initWebDataBinder(WebDataBinder webDataBinder) {
+
+		this.webDataBinder = webDataBinder;
 	}
 
 	@GetMapping("/recipe/{recipeId}/ingredients")
@@ -75,7 +89,7 @@ public class IngredientController {
 		model.addAttribute("uomList", uomList);
 
 		log.debug("update ingredient: " + ingredient);
-		return "recipe/ingredient/ingredientform";
+		return URL_INGREDIENT_FORM;
 	}
 
 	@GetMapping("/recipe/{recipeId}/ingredient/new")
@@ -95,11 +109,23 @@ public class IngredientController {
 	}
 
 	@PostMapping("/recipe/{recipeId}/ingredient")
-	public String saveIngredient(@PathVariable String recipeId, @ModelAttribute IngredientCommand ingredientCommand) {
+	public String saveIngredient(@PathVariable String recipeId, @ModelAttribute("ingredient") IngredientCommand ingredient,
+			Model model) {
 
-		log.debug("in saveIngredient: " + ingredientCommand);
+		webDataBinder.validate();
+		BindingResult bindingResult = webDataBinder.getBindingResult();
 
-		IngredientCommand savedIngredient = ingredientService.saveIngredientCommand(ingredientCommand).block();
+		if (bindingResult.hasErrors()) {
+			for (ObjectError error : bindingResult.getAllErrors()) {
+				log.error("bindingResult errors: " + error.getDefaultMessage());
+			}
+
+			model.addAttribute("uomList", unitOfMeasureService.getAll());
+			return URL_INGREDIENT_FORM;
+		}
+		log.debug("in saveIngredient: " + ingredient);
+
+		IngredientCommand savedIngredient = ingredientService.saveIngredientCommand(ingredient).block();
 
 		log.info("after save: " + savedIngredient);
 

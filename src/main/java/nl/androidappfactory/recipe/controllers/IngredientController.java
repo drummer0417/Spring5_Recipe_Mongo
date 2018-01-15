@@ -83,10 +83,8 @@ public class IngredientController {
 	public String getIngredientForm(@PathVariable String recipeId, @PathVariable String ingredientId, Model model) {
 
 		IngredientCommand ingredient = ingredientService.findByRecipeIdAndIngredientId(recipeId, ingredientId).block();
-		Flux<UnitOfMeasureCommand> uomList = unitOfMeasureService.getAll();
 
 		model.addAttribute("ingredient", ingredient);
-		model.addAttribute("uomList", uomList);
 
 		log.debug("update ingredient: " + ingredient);
 		return URL_INGREDIENT_FORM;
@@ -99,10 +97,7 @@ public class IngredientController {
 		ingredient.setRecipeId(recipeId);
 		ingredient.setUom(new UnitOfMeasureCommand());
 
-		Flux<UnitOfMeasureCommand> uomList = unitOfMeasureService.getAll();
-
 		model.addAttribute("ingredient", ingredient);
-		model.addAttribute("uomList", uomList);
 
 		log.debug("new ingredient: " + ingredient);
 		return "recipe/ingredient/ingredientform";
@@ -120,7 +115,6 @@ public class IngredientController {
 				log.error("bindingResult errors: " + error.getDefaultMessage());
 			}
 
-			model.addAttribute("uomList", unitOfMeasureService.getAll());
 			return URL_INGREDIENT_FORM;
 		}
 		log.debug("in saveIngredient: " + ingredient);
@@ -130,5 +124,10 @@ public class IngredientController {
 		log.info("after save: " + savedIngredient);
 
 		return "redirect:/recipe/" + recipeId + "/ingredients";
+	}
+
+	@ModelAttribute("uomList")
+	public Flux<UnitOfMeasureCommand> populateUomList() {
+		return unitOfMeasureService.getAll();
 	}
 }

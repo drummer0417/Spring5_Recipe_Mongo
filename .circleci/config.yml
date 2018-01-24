@@ -2,7 +2,6 @@
 #
 # Check https://circleci.com/docs/2.0/language-java/ for more details
 #
-#
 version: 2
 jobs:
   build:
@@ -39,10 +38,7 @@ jobs:
           key: v1-dependencies-{{ checksum "pom.xml" }}
 
       # run tests! and gen code coverage
-      - run: mvn integration-test cobertura:cobertura
-
-      - store_artifacts:
-          path: target/surefire-reports
+      - run: mvn integration-test
 
       - store_test_results:
           path: target/surefire-reports
